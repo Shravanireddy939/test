@@ -1,0 +1,63 @@
+package org.cap.service;
+
+import org.cap.dao.IDetailsDao;
+import org.cap.entities.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+
+/**
+ * marking with @Service ,@Service is similar to @Component but used for service implementations
+ *  Spring will create object of DetailsServiceImpl class and will keep in bean factory
+ */
+@Service//@Component
+@Transactional
+public class DetailsServiceImpl implements IDetailsService {
+
+
+    /**
+     * spring will inject with object of DetailsDaoImpl class because @Autowired is mentioned here
+     */
+    @Autowired
+    private IDetailsDao dao;
+
+    public IDetailsDao getDao(){
+        return dao;
+    }
+
+    public void setDao(IDetailsDao dao){
+        this.dao=dao;
+    }
+
+    @Override
+    public User findUserById(int id) {
+       User user= dao.findUserById(id);
+       return user;
+    }
+
+    @Override
+    public User createUser(User user) {
+       // transaction opened by spring
+         user= dao.createUser(user);
+        //transaction closed by spring
+        return user;
+    }
+
+
+    @Override
+    public User createUser(String name) {
+        return dao.createUser(name);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
